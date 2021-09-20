@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-enum Gender
+enum class Gender
 {
     Male,
     Female

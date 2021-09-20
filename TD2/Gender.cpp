@@ -10,9 +10,9 @@ std::ostream& operator<<(std::ostream& os, Gender g)
 {
     switch(g)
     {
-        case Male:
+        case Gender::Male:
             return os << "Masculin";
-        case Female:
+        case Gender::Female:
             return os << "Féminin";
         default:
             return (os.setstate(std::ios_base::failbit), os);

@@ -6,28 +6,28 @@ int main()
     HealthInsuranceOffice office;
 
     Person
-            charles("Charles", Male, office),
-            amandine("Amandine", Female, office);
+            charles("Charles", Gender::Male, office),
+            amandine("Amandine", Gender::Female, office);
     charles.setPartner(&amandine);
-    Person fred("Fred", Male, office);
+    Person fred("Fred", Gender::Male, office);
     charles.addChildren(&fred);
     charles.divorce();
 
-    Person sylvie("Sylvie", Female, office);
+    Person sylvie("Sylvie", Gender::Female, office);
     charles.setPartner(&sylvie);
-    Person regis("Régis", Male, office);
+    Person regis("Régis", Gender::Male, office);
     charles.addChildren(&regis);
 
-    Person jeff("Jeff", Male, office);
+    Person jeff("Jeff", Gender::Male, office);
     amandine.setPartner(&jeff);
     Person
-        marie("Marie", Female, office),
-        pedro("Pedro", Male, office);
+        marie("Marie", Gender::Female, office),
+        pedro("Pedro", Gender::Male, office);
     amandine.addChildren(&marie);
     amandine.addChildren(&pedro);
 
     marie.setPartner(&regis);
-    Person benoit("Benoit", Male, office);
+    Person benoit("Benoit", Gender::Male, office);
     marie.addChildren(&benoit);
 
     marie.addPoliceRecord(PoliceRecord("Mangeage de choucroute prohibé"));
