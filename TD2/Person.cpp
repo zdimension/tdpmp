@@ -123,7 +123,14 @@ const std::vector<Person*>& Person::getParents() const
 
 void Person::addChildren(Person* child)
 {
+    if (this->partner == nullptr)
+    {
+        std::cerr << "Partner required for child add" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     this->children.push_back(child);
+    this->partner->children.push_back(child);
     child->parents.push_back(this);
     child->parents.push_back(this->partner);
 }
