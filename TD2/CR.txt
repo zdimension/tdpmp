@@ -1,0 +1,50 @@
+exo1
+
+affiche :
+
+toto
+<comportement indéfini> / segfault
+<valeur indéfinie>
+<adresse de pt_s>
+<valeur de pt_s>
+<même adresse de pt_s>
+
+using namespace std, à jeter
+
+déjà, le *pt_s alors que pt_s est indéfini, c'est segfault assurée
+la probabilité qu'un pointeur non initialisé pointe vers une zone accessible est assez mince
+
+ensuite afficher pt_s est un comportement indéfini en C++
+afficher &pt_s ne l'est pas, toute variable (excepté registre) possède une adresse
+
+pt_s = &s ne pose pas de pb, et l'afficher ensuite non plus car cela revient à afficher la valeur du pointeur
+afficher &pt_s ne pose pas de pb, encore une fois
+
+exo2
+
+yeah_
+yeah_
+(invalide)
+yeah_
+06
+
+using namespace std, à jeter
+
+la concaténation dans do_something est inutile, elle ne modifie que la variable paramètre m locale
+
+le cout << i ne compile pas, i n'est pas déclaré
+
+
+exo3
+
+yeah_
+yeah_
+<valeur de pt_s>
+<plantage probable>
+
+using namespace std, à jeter
+
+do_something renvoie un pointeur vers s, variable paramètre locale, ça pose pas de problème en tant que tel, mais :
+
+quand on fait ensuite *pt_s, grosse probabilité de segfault car l'espace a été libéré
+

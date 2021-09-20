@@ -1,0 +1,17 @@
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+!Makefile
+Makefile.depend
+
+*.a
+*.o
+*.out
+*.output
+
+cmake-build-debug
