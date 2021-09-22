@@ -8,27 +8,27 @@ int main()
     Person
             charles("Charles", Gender::Male, office),
             amandine("Amandine", Gender::Female, office);
-    charles.setPartner(&amandine);
+    charles.setPartner(amandine);
     Person fred("Fred", Gender::Male, office);
-    charles.addChildren(&fred);
+    charles.addChild(fred);
     charles.divorce();
 
     Person sylvie("Sylvie", Gender::Female, office);
-    charles.setPartner(&sylvie);
+    charles.setPartner(sylvie);
     Person regis("Régis", Gender::Male, office);
-    charles.addChildren(&regis);
+    charles.addChild(regis);
 
     Person jeff("Jeff", Gender::Male, office);
-    amandine.setPartner(&jeff);
+    amandine.setPartner(jeff);
     Person
         marie("Marie", Gender::Female, office),
         pedro("Pedro", Gender::Male, office);
-    amandine.addChildren(&marie);
-    amandine.addChildren(&pedro);
+    amandine.addChild(marie);
+    amandine.addChild(pedro);
 
-    marie.setPartner(&regis);
+    marie.setPartner(regis);
     Person benoit("Benoit", Gender::Male, office);
-    marie.addChildren(&benoit);
+    marie.addChild(benoit);
 
     marie.addPoliceRecord(PoliceRecord("Mangeage de choucroute prohibé"));
 

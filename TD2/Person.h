@@ -25,13 +25,13 @@ public:
 
     [[nodiscard]] Person* getPartner() const;
 
-    void setPartner(Person* partner);
+    void setPartner(Person& partner);
 
     [[nodiscard]] const std::vector<Person*>& getChildren() const;
 
     [[nodiscard]] const std::vector<Person*>& getParents() const;
 
-    void addChildren(Person* child);
+    void addChild(Person& child);
 
     void divorce();
 

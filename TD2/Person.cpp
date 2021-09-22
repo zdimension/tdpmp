@@ -94,21 +94,15 @@ Person* Person::getPartner() const
     return partner;
 }
 
-void Person::setPartner(Person* other)
+void Person::setPartner(Person& other)
 {
-    if (other == nullptr)
-    {
-        std::cerr << "Partner is null" << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
     if (this->partner)
     {
         this->partner->partner = nullptr;
     }
 
-    this->partner = other;
-    other->partner = this;
+    this->partner = &other;
+    other.partner = this;
 }
 
 const std::vector<Person*>& Person::getChildren() const
@@ -121,7 +115,7 @@ const std::vector<Person*>& Person::getParents() const
     return parents;
 }
 
-void Person::addChildren(Person* child)
+void Person::addChild(Person& child)
 {
     if (this->partner == nullptr)
     {
@@ -129,10 +123,10 @@ void Person::addChildren(Person* child)
         exit(EXIT_FAILURE);
     }
 
-    this->children.push_back(child);
-    this->partner->children.push_back(child);
-    child->parents.push_back(this);
-    child->parents.push_back(this->partner);
+    this->children.push_back(&child);
+    this->partner->children.push_back(&child);
+    child.parents.push_back(this);
+    child.parents.push_back(this->partner);
 }
 
 void Person::divorce()
