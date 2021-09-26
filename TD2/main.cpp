@@ -34,5 +34,11 @@ int main()
 
     std::cout << marie << std::endl;
 
+    std::cout << marie.check(true) << std::endl;
+
+    marie.addChild(amandine);
+
+    std::cout << marie.check(true) << std::endl;
+
     return 0;
 }

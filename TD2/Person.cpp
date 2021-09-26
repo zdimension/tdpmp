@@ -147,31 +147,29 @@ bool Person::isSibling(Person& other) const
 
 bool Person::checkCycles() const
 {
-    std::set<const Person*> visited{};
-    std::vector<const Person*> toVisit{};
-
-    toVisit.push_back(this);
-
-    while (!toVisit.empty())
+    for(auto way : {&Person::getChildren, &Person::getParents})
     {
-        const Person* current = toVisit.back();
-        toVisit.pop_back();
+        std::set<const Person*> visited{};
+        std::vector<const Person*> toVisit{};
 
-        if (visited.contains(current))
+        toVisit.push_back(this);
+
+        while (!toVisit.empty())
         {
-            return true;
-        }
+            const Person* current = toVisit.back();
+            toVisit.pop_back();
 
-        visited.insert(current);
+            if (visited.contains(current))
+            {
+                return true;
+            }
 
-        for (Person* child : current->children)
-        {
-            toVisit.push_back(child);
-        }
+            visited.insert(current);
 
-        for (Person* parent : current->parents)
-        {
-            toVisit.push_back(parent);
+            for (Person* parent : (current->*way)())
+            {
+                toVisit.push_back(parent);
+            }
         }
     }
 
