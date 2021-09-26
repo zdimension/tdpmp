@@ -17,7 +17,7 @@ bool Person::check(bool verbose) const
     auto assert = [verbose, &result](bool condition, const std::string& message)
     {
         result = result && condition;
-        if (!condition)
+        if (verbose && !condition)
             std::cerr << "CHECK: " << message << std::endl;
     };
 
