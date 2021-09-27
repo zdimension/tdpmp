@@ -158,4 +158,24 @@ std::ostream& operator<<(std::ostream& os, const Node<U>& node)
     return os;
 }
 
+template<typename T>
+ssize_t Node<T>::countNodes()
+{
+    ssize_t result = 1;
+
+    if (left_child)
+        result += left_child->countNodes();
+
+    if (right_child)
+        result += right_child->countNodes();
+
+    return result;
+}
+
+template<typename T>
+Node<T>::Node(T value, Node<T>* leftChild, Node<T>* rightChild):value(value), left_child(leftChild),
+                                                                right_child(rightChild)
+{
+}
+
 #endif //TD3_NODE_IPP
