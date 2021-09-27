@@ -41,7 +41,8 @@ int main()
     std::cout << tree2.prettyPrint() << std::endl;
     auto x = tree2.root_node->iterate_left_hand();
     for(auto y : x)
-        std::cout << y->getValue() << std::endl;
+        std::cout << y->getValue() << " ";
+    std::cout << std::endl;
 
     return 0;
 }
