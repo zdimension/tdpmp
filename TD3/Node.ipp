@@ -113,9 +113,9 @@ std::vector<Node<T>*> Node<T>::iterate_left_hand()
     std::stack<Node<T>*> s;
     Node<T>* curr = this;
 
-    while (curr != NULL || !s.empty())
+    while (curr != nullptr || !s.empty())
     {
-        while (curr != NULL)
+        while (curr != nullptr)
         {
             s.push(curr);
             curr = curr->getLeftChild();
