@@ -16,6 +16,7 @@ int main()
 
     std::cout << tree << std::endl;
     std::cout << tree.prettyPrint() << std::endl;
+
     std::cout << "Noeuds : " << tree.countNodes() << std::endl;
     std::cout << "Hauteur : " << tree.height() << std::endl;
 
@@ -24,6 +25,23 @@ int main()
         tree.remove(i);
         std::cout << "After remove " << i << " : " << tree << std::endl;
     }
+
+    Tree<char> tree2(
+            new Node<char>('A',
+                     new Node<char>('B',
+                                    new Node<char>('C',
+                                                   new Node<char>('D'),
+                                                   new Node<char>('E')),
+                                    new Node<char>('F')),
+                     new Node<char>('G',
+                                    new Node<char>('H'),
+                                    new Node<char>('I',
+                                                   new Node<char>('J'),
+                                                   new Node<char>('K')))));
+    std::cout << tree2.prettyPrint() << std::endl;
+    auto x = tree2.root_node->iterate_left_hand();
+    for(auto y : x)
+        std::cout << y->getValue() << std::endl;
 
     return 0;
 }

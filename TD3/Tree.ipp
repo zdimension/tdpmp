@@ -15,6 +15,10 @@ template<typename T>
 class Tree final
 {
 public:
+    Tree();
+
+    Tree(Node<T>* rootNode);
+
     ~Tree()
     {
         delete root_node;
@@ -34,21 +38,24 @@ public:
     }
 
     template<typename U>
-    friend std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
-    {
-        if (tree.root_node)
-            os << *tree.root_node;
-        else
-            os << "[EMPTY TREE]";
-        return os;
-    }
+    friend std::ostream& operator<<(std::ostream& os, const Tree<U>& tree);
 
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree);
 
-private:
+public:
     Node<T>* root_node = nullptr;
 };
+
+template <typename U>
+std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
+{
+    if (tree.root_node)
+        os << *tree.root_node;
+    else
+        os << "[EMPTY TREE]";
+    return os;
+}
 
 template<typename T>
 struct pretty_print_s
@@ -66,13 +73,21 @@ std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree)
 template<typename T>
 void printBT(std::ostream& os, const std::string& prefix, const Node<T>* node, bool isLeft)
 {
+    os << prefix;
+    os << (isLeft ? "├──" : "└──");
+
     if (node != nullptr)
     {
-        os << prefix;
-        os << (isLeft ? "├──" : "└──");
         os << node->getValue() << std::endl;
-        printBT(os, prefix + (isLeft ? "│   " : "    "), node->getLeftChild(), true);
-        printBT(os, prefix + (isLeft ? "│   " : "    "), node->getRightChild(), false);
+        if (node->getLeftChild() || node->getRightChild())
+        {
+            printBT(os, prefix + (isLeft ? "│   " : "    "), node->getLeftChild(), true);
+            printBT(os, prefix + (isLeft ? "│   " : "    "), node->getRightChild(), false);
+        }
+    }
+    else
+    {
+        os << std::endl;
     }
 }
 
@@ -114,6 +129,16 @@ void Tree<T>::remove(T value)
     {
         remove_rec(value, &root_node);
     }
+}
+
+template<typename T>
+Tree<T>::Tree()
+{
+}
+
+template<typename T>
+Tree<T>::Tree(Node<T>* rootNode):root_node(rootNode)
+{
 }
 
 template<typename T>
@@ -204,6 +229,12 @@ ssize_t Node<T>::countNodes()
         result += right_child->countNodes();
 
     return result;
+}
+
+template<typename T>
+Node<T>::Node(T value, Node<T>* leftChild, Node<T>* rightChild):value(value), left_child(leftChild),
+                                                                right_child(rightChild)
+{
 }
 
 #endif //TD3_TREE_IPP

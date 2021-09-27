@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <ostream>
+#include <stack>
 
 template <typename T>
 class Node final
@@ -26,9 +27,11 @@ public:
 
     }
 
+    Node(T value, Node<T>* leftChild, Node<T>* rightChild);
+
     void remove_all_children();
 
-    std::vector<Node<T>> iterate_left_hand();
+    std::vector<Node<T>*> iterate_left_hand();
 
     T getValue() const
     {
@@ -103,18 +106,27 @@ ssize_t Node<T>::height()
 }
 
 template <typename T>
-std::vector<Node<T>> Node<T>::iterate_left_hand()
+std::vector<Node<T>*> Node<T>::iterate_left_hand()
 {
-    std::vector<Node<T>> res{this};
+    std::vector<Node<T>*> vec{};
 
-    if (left_child != nullptr)
+    std::stack<Node<T>*> s;
+    Node<T>* curr = this;
+
+    while (curr != NULL || !s.empty())
     {
-        auto left = left_child->iterate_left_hand();
-        res.reserve(res.size() + left.size());
-        res.insert(res.end(), left.begin(), left.end());
+        while (curr != NULL)
+        {
+            s.push(curr);
+            curr = curr->getLeftChild();
+        }
+        curr = s.top();
+        s.pop();
+        vec.push_back(curr);
+        curr = curr->getRightChild();
     }
 
-    return res;
+    return vec;
 }
 
 template<typename T>
