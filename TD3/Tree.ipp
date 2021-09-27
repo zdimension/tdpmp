@@ -15,9 +15,11 @@ template<typename T>
 class Tree final
 {
 public:
-    Tree();
+    Tree() = default;
 
-    Tree(Node<T>* rootNode);
+    explicit Tree(Node<T>* rootNode):root_node(rootNode)
+    {
+    }
 
     ~Tree()
     {
@@ -132,16 +134,6 @@ void Tree<T>::remove(T value)
 }
 
 template<typename T>
-Tree<T>::Tree()
-{
-}
-
-template<typename T>
-Tree<T>::Tree(Node<T>* rootNode):root_node(rootNode)
-{
-}
-
-template<typename T>
 void add_rec(T value, Node<T>* node)
 {
     if (value < node->getValue())
@@ -166,7 +158,7 @@ void add_rec(T value, Node<T>* node)
             add_rec(value, node->getRightChild());
         }
     }
-    else
+    else // node already in tree
     {
         return;
     }
