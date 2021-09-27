@@ -15,6 +15,9 @@ int main()
     }
 
     std::cout << tree << std::endl;
+    std::cout << tree.prettyPrint() << std::endl;
+    std::cout << "Noeuds : " << tree.countNodes() << std::endl;
+    std::cout << "Hauteur : " << tree.height() << std::endl;
 
     for (int i = 1; i <= 50; i++)
     {

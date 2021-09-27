@@ -6,8 +6,12 @@
 #define TD3_TREE_IPP
 
 #include "Node.ipp"
+#include <iostream>
 
-template <typename T>
+template<typename T>
+struct pretty_print_s;
+
+template<typename T>
 class Tree final
 {
 public:
@@ -16,27 +20,20 @@ public:
         delete root_node;
     }
 
-    void add(T value)
+    void add(T value);
+
+    void remove(T value);
+
+    ssize_t height();
+
+    ssize_t countNodes();
+
+    pretty_print_s<T> prettyPrint()
     {
-        if (root_node == nullptr)
-        {
-            root_node = new Node<T>(value);
-        }
-        else
-        {
-            add_rec(value, root_node);
-        }
+        return {*this};
     }
 
-    void remove(T value)
-    {
-        if (root_node != nullptr)
-        {
-            remove_rec(value, &root_node);
-        }
-    }
-
-    template <typename U>
+    template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
     {
         if (tree.root_node)
@@ -45,9 +42,79 @@ public:
             os << "[EMPTY TREE]";
         return os;
     }
+
+    template<typename U>
+    friend std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree);
+
 private:
     Node<T>* root_node = nullptr;
 };
+
+template<typename T>
+struct pretty_print_s
+{
+    Tree<T>& ref;
+};
+
+template<typename U>
+std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree)
+{
+    printBT(os, "", tree.ref.root_node, false);
+    return os;
+}
+
+template<typename T>
+void printBT(std::ostream& os, const std::string& prefix, const Node<T>* node, bool isLeft)
+{
+    if (node != nullptr)
+    {
+        os << prefix;
+        os << (isLeft ? "├──" : "└──");
+        os << node->getValue() << std::endl;
+        printBT(os, prefix + (isLeft ? "│   " : "    "), node->getLeftChild(), true);
+        printBT(os, prefix + (isLeft ? "│   " : "    "), node->getRightChild(), false);
+    }
+}
+
+template<typename T>
+ssize_t Tree<T>::height()
+{
+    if (root_node)
+        return 1 + root_node->height();
+    else
+        return 0;
+}
+
+template<typename T>
+ssize_t Tree<T>::countNodes()
+{
+    if (root_node)
+        return root_node->countNodes();
+    else
+        return 0;
+}
+
+template<typename T>
+void Tree<T>::add(T value)
+{
+    if (root_node == nullptr)
+    {
+        root_node = new Node<T>(value);
+    }
+    else
+    {
+        add_rec(value, root_node);
+    }
+}
+
+template<typename T>
+void Tree<T>::remove(T value)
+{
+    if (root_node != nullptr)
+    {
+        remove_rec(value, &root_node);
+    }
+}
 
 template<typename T>
 void add_rec(T value, Node<T>* node)
@@ -123,6 +190,20 @@ void remove_rec(T value, Node<T>** node)
     {
         remove_rec(value, &(*node)->right_child);
     }
+}
+
+template<typename T>
+ssize_t Node<T>::countNodes()
+{
+    ssize_t result = 1;
+
+    if (left_child)
+        result += left_child->countNodes();
+
+    if (right_child)
+        result += right_child->countNodes();
+
+    return result;
 }
 
 #endif //TD3_TREE_IPP

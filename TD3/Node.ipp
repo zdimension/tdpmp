@@ -26,34 +26,18 @@ public:
 
     }
 
-    void remove_all_children()
-    {
-        remove_child(&this->left_child);
-        remove_child(&this->right_child);
-    }
+    void remove_all_children();
 
-    std::vector<Node<T>> iterate_left_hand()
-    {
-        std::vector<Node<T>> res{this};
-
-        if (left_child != nullptr)
-        {
-            auto left = left_child->iterate_left_hand();
-            res.reserve(res.size() + left.size());
-            res.insert(res.end(), left.begin(), left.end());
-        }
-
-        return res;
-    }
+    std::vector<Node<T>> iterate_left_hand();
 
     T getValue() const
     {
         return value;
     }
 
-    void setValue(T value)
+    void setValue(T val)
     {
-        Node::value = value;
+        Node::value = val;
     }
 
     Node<T>* getLeftChild() const
@@ -82,6 +66,10 @@ public:
         delete right_child;
     }
 
+    ssize_t height();
+
+    ssize_t countNodes();
+
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Node<U>& node);
 
@@ -93,6 +81,41 @@ private:
     Node<T>* left_child = nullptr;
     Node<T>* right_child = nullptr;
 };
+
+template <typename T>
+void Node<T>::remove_all_children()
+{
+    remove_child(&this->left_child);
+    remove_child(&this->right_child);
+}
+
+template <typename T>
+ssize_t Node<T>::height()
+{
+    if (left_child && right_child)
+        return std::max(left_child->height(), right_child->height()) + 1;
+    else if (left_child)
+        return left_child->height() + 1;
+    else if (right_child)
+        return right_child->height() + 1;
+    else
+        return 0;
+}
+
+template <typename T>
+std::vector<Node<T>> Node<T>::iterate_left_hand()
+{
+    std::vector<Node<T>> res{this};
+
+    if (left_child != nullptr)
+    {
+        auto left = left_child->iterate_left_hand();
+        res.reserve(res.size() + left.size());
+        res.insert(res.end(), left.begin(), left.end());
+    }
+
+    return res;
+}
 
 template<typename T>
 void remove_child(Node<T>** pointer)
