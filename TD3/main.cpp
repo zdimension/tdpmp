@@ -34,19 +34,19 @@ int main()
 
     Tree<char> tree2(
             Node<char>('A',
-                     new Node<char>('B',
-                                    new Node<char>('C',
-                                                   new Node<char>('D'),
-                                                   new Node<char>('E')),
-                                    new Node<char>('F')),
-                     new Node<char>('G',
-                                    new Node<char>('H'),
-                                    new Node<char>('I',
-                                                   new Node<char>('J'),
-                                                   new Node<char>('K')))));
+                       new Node<char>('B',
+                                      new Node<char>('C',
+                                                     new Node<char>('D'),
+                                                     new Node<char>('E')),
+                                      new Node<char>('F')),
+                       new Node<char>('G',
+                                      new Node<char>('H'),
+                                      new Node<char>('I',
+                                                     new Node<char>('J'),
+                                                     new Node<char>('K')))));
     std::cout << tree2.pretty() << std::endl;
     auto x = tree2.root_node->iterate_left_hand();
-    for(auto y : x)
+    for (auto y: x)
         std::cout << y->get_value() << " ";
     std::cout << std::endl;
 

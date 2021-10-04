@@ -14,11 +14,11 @@
  * Binary tree node.
  * @tparam T value type
  */
-template <typename T>
+template<typename T>
 class Node final
 {
 public:
-    explicit Node(T value):value(value)
+    explicit Node(T value) : value(value)
     {
     }
 
@@ -94,6 +94,13 @@ public:
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Node<U>& node);
 
+    static Node<T>* copy(Node<T>* ptr)
+    {
+        if (ptr == nullptr)
+            return nullptr;
+        return new Node<T>(*ptr);
+    }
+
 private:
     template<typename U>
     friend void remove_rec(U value, Node<U>** node);
@@ -101,22 +108,16 @@ private:
     T value;
     Node<T>* left_child = nullptr;
     Node<T>* right_child = nullptr;
-
-    static Node<T>* copy(Node<T>* ptr)
-    {
-        if (ptr == nullptr) return nullptr;
-        return new Node<T>(*ptr);
-    }
 };
 
-template <typename T>
+template<typename T>
 void Node<T>::remove_all_children()
 {
     remove_child(&this->left_child);
     remove_child(&this->right_child);
 }
 
-template <typename T>
+template<typename T>
 ssize_t Node<T>::height()
 {
     if (left_child && right_child)
@@ -129,7 +130,7 @@ ssize_t Node<T>::height()
         return 0;
 }
 
-template <typename T>
+template<typename T>
 std::vector<Node<T>*> Node<T>::iterate_left_hand()
 {
     std::vector<Node<T>*> vec{};

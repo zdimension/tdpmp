@@ -28,11 +28,11 @@ public:
      */
     Tree() = default;
 
-    explicit Tree(Node<T> rootNode):root_node(new Node<T>(rootNode))
+    explicit Tree(Node<T> rootNode) : root_node(new Node<T>(rootNode))
     {
     }
 
-    Tree(const Tree& tree) : Tree(*tree.root_node)
+    Tree(const Tree& tree) : root_node(Node<T>::copy(tree.root_node))
     {
     }
 
@@ -123,7 +123,7 @@ public:
     Node<T>* root_node = nullptr;
 };
 
-template <typename U>
+template<typename U>
 std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
 {
     if (tree.root_node)
