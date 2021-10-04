@@ -28,7 +28,11 @@ public:
      */
     Tree() = default;
 
-    explicit Tree(Node<T>* rootNode):root_node(rootNode)
+    explicit Tree(Node<T> rootNode):root_node(new Node<T>(rootNode))
+    {
+    }
+
+    Tree(const Tree& tree) : Tree(*tree.root_node)
     {
     }
 

@@ -2,6 +2,11 @@
 #include <random>
 #include "Tree.ipp"
 
+void truc(Tree<int> tree)
+{
+
+}
+
 int main()
 {
     std::random_device rd;
@@ -16,6 +21,7 @@ int main()
 
     std::cout << tree << std::endl;
     std::cout << tree.pretty() << std::endl;
+    truc(tree);
 
     std::cout << "Noeuds : " << tree.count_nodes() << std::endl;
     std::cout << "Hauteur : " << tree.height() << std::endl;
@@ -27,7 +33,7 @@ int main()
     }
 
     Tree<char> tree2(
-            new Node<char>('A',
+            Node<char>('A',
                      new Node<char>('B',
                                     new Node<char>('C',
                                                    new Node<char>('D'),

@@ -24,8 +24,8 @@ public:
 
     Node(const Node& node) :
             value(node.value),
-            left_child(node.left_child),
-            right_child(node.right_child)
+            left_child(copy(node.left_child)),
+            right_child(copy(node.right_child))
     {
     }
 
@@ -101,6 +101,12 @@ private:
     T value;
     Node<T>* left_child = nullptr;
     Node<T>* right_child = nullptr;
+
+    static Node<T>* copy(Node<T>* ptr)
+    {
+        if (ptr == nullptr) return nullptr;
+        return new Node<T>(*ptr);
+    }
 };
 
 template <typename T>
