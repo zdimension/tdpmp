@@ -10,6 +10,9 @@
 #include <ostream>
 #include <stack>
 
+template<typename T>
+class Tree;
+
 /**
  * Binary tree node.
  * @tparam T value type
@@ -104,6 +107,9 @@ public:
 private:
     template<typename U>
     friend void remove_rec(U value, Node<U>** node);
+
+    template<typename U>
+    friend void Tree<U>::remove(U value);
 
     T value;
     Node<T>* left_child = nullptr;

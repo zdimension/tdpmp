@@ -13,7 +13,7 @@ int main()
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dis(1, 50);
 
-    Tree<int> tree{};
+    Tree<int> tree{Node<int>(1)};
     for (int i = 0; i < 10; i++)
     {
         tree.add(dis(gen));
@@ -45,7 +45,7 @@ int main()
                                                      new Node<char>('J'),
                                                      new Node<char>('K')))));
     std::cout << tree2.pretty() << std::endl;
-    auto x = tree2.root_node->iterate_left_hand();
+    auto x = tree2.root_node.iterate_left_hand();
     for (auto y: x)
         std::cout << y->get_value() << " ";
     std::cout << std::endl;

@@ -23,22 +23,14 @@ template<typename T>
 class Tree final
 {
 public:
-    /**
-     * Creates an empty binary tree.
-     */
-    Tree() = default;
+    Tree() = delete;
 
-    explicit Tree(Node<T> rootNode) : root_node(new Node<T>(rootNode))
+    explicit Tree(Node<T> rootNode) : root_node(rootNode)
     {
     }
 
-    Tree(const Tree& tree) : root_node(Node<T>::copy(tree.root_node))
+    Tree(const Tree& tree) : Tree(tree.root_node)
     {
-    }
-
-    ~Tree()
-    {
-        delete root_node;
     }
 
     /**
@@ -120,17 +112,13 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree);
 
 public:
-    Node<T>* root_node = nullptr;
+    Node<T> root_node;
 };
 
 template<typename U>
 std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
 {
-    if (tree.root_node)
-        os << *tree.root_node;
-    else
-        os << "[EMPTY TREE]";
-    return os;
+    return os << tree.root_node;
 }
 
 template<typename T>
@@ -142,7 +130,7 @@ struct pretty_print_s
 template<typename U>
 std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree)
 {
-    pretty_print(os, "", tree.ref.root_node, false);
+    pretty_print(os, "", &tree.ref.root_node, false);
     return os;
 }
 
@@ -170,41 +158,26 @@ void pretty_print(std::ostream& os, const std::string& prefix, const Node<T>* no
 template<typename T>
 ssize_t Tree<T>::height()
 {
-    if (root_node)
-        return 1 + root_node->height();
-    else
-        return 0;
+    return 1 + root_node.height();
 }
 
 template<typename T>
 ssize_t Tree<T>::count_nodes()
 {
-    if (root_node)
-        return root_node->count_nodes();
-    else
-        return 0;
+    return root_node.count_nodes();
 }
 
 template<typename T>
 void Tree<T>::add(T value)
 {
-    if (root_node == nullptr)
-    {
-        root_node = new Node<T>(value);
-    }
-    else
-    {
-        add_rec(value, root_node);
-    }
+    add_rec(value, &root_node);
 }
 
 template<typename T>
 void Tree<T>::remove(T value)
 {
-    if (root_node != nullptr)
-    {
-        remove_rec(value, &root_node);
-    }
+    remove_rec(value, &root_node.left_child);
+    remove_rec(value, &root_node.right_child);
 }
 
 template<typename T>
@@ -241,6 +214,11 @@ void add_rec(T value, Node<T>* node)
 template<typename T>
 void remove_rec(T value, Node<T>** node)
 {
+    if (*node == nullptr)
+    {
+        return;
+    }
+
     if ((*node)->value == value)
     {
         if ((*node)->left_child == nullptr && (*node)->right_child == nullptr)
