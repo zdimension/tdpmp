@@ -8,13 +8,24 @@
 #include "Node.ipp"
 #include <iostream>
 
+/**
+ * Container for pretty-print std::ostream handler
+ * @tparam T value type
+ */
 template<typename T>
 struct pretty_print_s;
 
+/**
+ * Binary tree with BST operations.
+ * @tparam T value type
+ */
 template<typename T>
 class Tree final
 {
 public:
+    /**
+     * Creates an empty binary tree.
+     */
     Tree() = default;
 
     explicit Tree(Node<T>* rootNode):root_node(rootNode)
@@ -26,19 +37,78 @@ public:
         delete root_node;
     }
 
+    /**
+     * Adds a value to the binary search tree.
+     * @tparam T value type
+     * @param value value to add
+     */
     void add(T value);
 
+    /**
+     * Removes a value from the binary search tree.
+     * @tparam T value type
+     * @param value value to remove
+     */
     void remove(T value);
 
+    /**
+     * @return the height of the root node, i.e. the largest number of edges between the root and the deepest leaf node
+     */
     ssize_t height();
 
-    ssize_t countNodes();
+    /**
+     * @return the total number of nodes in the tree
+     */
+    ssize_t count_nodes();
 
-    pretty_print_s<T> prettyPrint()
+    /**
+     * Prints the tree in horizontal tree notation.
+     *
+     * Usage: std::cout << tree.pretty() << std::endl
+     *
+     * Example output:
+     * └──26
+     *     ├──23
+     *     │   ├──16
+     *     │   │   ├──7
+     *     │   │   └──20
+     *     │   └──
+     *     └──49
+     *         ├──42
+     *         │   ├──40
+     *         │   └──44
+     *         └──
+     * @tparam U value type
+     * @param os output stream
+     * @param tree tree
+     * @return output stream
+     */
+    pretty_print_s<T> pretty()
     {
         return {*this};
     }
 
+    /**
+     * Prints the tree in linear notation.
+     *
+     * Example:
+     * └──26
+     *     ├──23
+     *     │   ├──16
+     *     │   │   ├──7
+     *     │   │   └──20
+     *     │   └──
+     *     └──49
+     *         ├──42
+     *         │   ├──40
+     *         │   └──44
+     *         └──
+     * is printed as: 26(23(16(7()())(20()()))())(49(42(40()())(44()()))())
+     * @tparam U value type
+     * @param os output stream
+     * @param tree tree
+     * @return output stream
+     */
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Tree<U>& tree);
 
@@ -68,23 +138,23 @@ struct pretty_print_s
 template<typename U>
 std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree)
 {
-    printBT(os, "", tree.ref.root_node, false);
+    pretty_print(os, "", tree.ref.root_node, false);
     return os;
 }
 
 template<typename T>
-void printBT(std::ostream& os, const std::string& prefix, const Node<T>* node, bool isLeft)
+void pretty_print(std::ostream& os, const std::string& prefix, const Node<T>* node, bool isLeft)
 {
     os << prefix;
     os << (isLeft ? "├──" : "└──");
 
     if (node != nullptr)
     {
-        os << node->getValue() << std::endl;
-        if (node->getLeftChild() || node->getRightChild())
+        os << node->get_value() << std::endl;
+        if (node->get_left_child() || node->get_right_child())
         {
-            printBT(os, prefix + (isLeft ? "│   " : "    "), node->getLeftChild(), true);
-            printBT(os, prefix + (isLeft ? "│   " : "    "), node->getRightChild(), false);
+            pretty_print(os, prefix + (isLeft ? "│   " : "    "), node->get_left_child(), true);
+            pretty_print(os, prefix + (isLeft ? "│   " : "    "), node->get_right_child(), false);
         }
     }
     else
@@ -103,10 +173,10 @@ ssize_t Tree<T>::height()
 }
 
 template<typename T>
-ssize_t Tree<T>::countNodes()
+ssize_t Tree<T>::count_nodes()
 {
     if (root_node)
-        return root_node->countNodes();
+        return root_node->count_nodes();
     else
         return 0;
 }
@@ -136,26 +206,26 @@ void Tree<T>::remove(T value)
 template<typename T>
 void add_rec(T value, Node<T>* node)
 {
-    if (value < node->getValue())
+    if (value < node->get_value())
     {
-        if (node->getLeftChild() == nullptr)
+        if (node->get_left_child() == nullptr)
         {
-            node->setLeftChild(new Node<T>(value));
+            node->set_left_child(new Node<T>(value));
         }
         else
         {
-            add_rec(value, node->getLeftChild());
+            add_rec(value, node->get_left_child());
         }
     }
-    else if (value > node->getValue())
+    else if (value > node->get_value())
     {
-        if (node->getRightChild() == nullptr)
+        if (node->get_right_child() == nullptr)
         {
-            node->setRightChild(new Node<T>(value));
+            node->set_right_child(new Node<T>(value));
         }
         else
         {
-            add_rec(value, node->getRightChild());
+            add_rec(value, node->get_right_child());
         }
     }
     else // node already in tree

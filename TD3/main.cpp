@@ -15,9 +15,9 @@ int main()
     }
 
     std::cout << tree << std::endl;
-    std::cout << tree.prettyPrint() << std::endl;
+    std::cout << tree.pretty() << std::endl;
 
-    std::cout << "Noeuds : " << tree.countNodes() << std::endl;
+    std::cout << "Noeuds : " << tree.count_nodes() << std::endl;
     std::cout << "Hauteur : " << tree.height() << std::endl;
 
     for (int i = 1; i <= 50; i++)
@@ -38,10 +38,10 @@ int main()
                                     new Node<char>('I',
                                                    new Node<char>('J'),
                                                    new Node<char>('K')))));
-    std::cout << tree2.prettyPrint() << std::endl;
+    std::cout << tree2.pretty() << std::endl;
     auto x = tree2.root_node->iterate_left_hand();
     for(auto y : x)
-        std::cout << y->getValue() << " ";
+        std::cout << y->get_value() << " ";
     std::cout << std::endl;
 
     return 0;

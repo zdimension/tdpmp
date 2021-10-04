@@ -10,13 +10,16 @@
 #include <ostream>
 #include <stack>
 
+/**
+ * Binary tree node.
+ * @tparam T value type
+ */
 template <typename T>
 class Node final
 {
 public:
     explicit Node(T value):value(value)
     {
-
     }
 
     Node(const Node& node) :
@@ -24,41 +27,47 @@ public:
             left_child(node.left_child),
             right_child(node.right_child)
     {
-
     }
 
     Node(T value, Node<T>* leftChild, Node<T>* rightChild);
 
+    /**
+     * Removes all children from the node.
+     */
     void remove_all_children();
 
+    /**
+     * Performs an in-order traversal of the tree.
+     * @return nodes, in order of traversal
+     */
     std::vector<Node<T>*> iterate_left_hand();
 
-    T getValue() const
+    T get_value() const
     {
         return value;
     }
 
-    void setValue(T val)
+    void set_value(T val)
     {
         Node::value = val;
     }
 
-    Node<T>* getLeftChild() const
+    Node<T>* get_left_child() const
     {
         return left_child;
     }
 
-    void setLeftChild(Node<T>* leftChild)
+    void set_left_child(Node<T>* leftChild)
     {
         left_child = leftChild;
     }
 
-    Node<T>* getRightChild() const
+    Node<T>* get_right_child() const
     {
         return right_child;
     }
 
-    void setRightChild(Node<T>* rightChild)
+    void set_right_child(Node<T>* rightChild)
     {
         right_child = rightChild;
     }
@@ -69,17 +78,26 @@ public:
         delete right_child;
     }
 
+    /**
+     * @return the height of the node, i.e. the largest number of edges between the node and the deepest child node
+     */
     ssize_t height();
 
-    ssize_t countNodes();
+    /**
+     * @return the total number of nodes in the subtree
+     */
+    ssize_t count_nodes();
 
+    /**
+     * @see std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
+     */
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const Node<U>& node);
 
+private:
     template<typename U>
     friend void remove_rec(U value, Node<U>** node);
 
-private:
     T value;
     Node<T>* left_child = nullptr;
     Node<T>* right_child = nullptr;
@@ -118,12 +136,12 @@ std::vector<Node<T>*> Node<T>::iterate_left_hand()
         while (curr != nullptr)
         {
             s.push(curr);
-            curr = curr->getLeftChild();
+            curr = curr->get_left_child();
         }
         curr = s.top();
         s.pop();
         vec.push_back(curr);
-        curr = curr->getRightChild();
+        curr = curr->get_right_child();
     }
 
     return vec;
@@ -143,31 +161,31 @@ void remove_child(Node<T>** pointer)
 template<typename U>
 std::ostream& operator<<(std::ostream& os, const Node<U>& node)
 {
-    os << node.getValue();
+    os << node.get_value();
     os << "(";
-    if (node.getLeftChild() != nullptr)
+    if (node.get_left_child() != nullptr)
     {
-        os << *node.getLeftChild();
+        os << *node.get_left_child();
     }
     os << ")(";
-    if (node.getRightChild() != nullptr)
+    if (node.get_right_child() != nullptr)
     {
-        os << *node.getRightChild();
+        os << *node.get_right_child();
     }
     os << ")";
     return os;
 }
 
 template<typename T>
-ssize_t Node<T>::countNodes()
+ssize_t Node<T>::count_nodes()
 {
     ssize_t result = 1;
 
     if (left_child)
-        result += left_child->countNodes();
+        result += left_child->count_nodes();
 
     if (right_child)
-        result += right_child->countNodes();
+        result += right_child->count_nodes();
 
     return result;
 }
