@@ -45,7 +45,7 @@ int main()
                                                      new Node<char>('J'),
                                                      new Node<char>('K')))));
     std::cout << tree2.pretty() << std::endl;
-    auto x = tree2.root_node.iterate_left_hand();
+    auto x = tree2.get_root_node().iterate_left_hand();
     for (auto y: x)
         std::cout << y->get_value() << " ";
     std::cout << std::endl;

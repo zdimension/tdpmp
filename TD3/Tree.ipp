@@ -50,12 +50,12 @@ public:
     /**
      * @return the height of the root node, i.e. the largest number of edges between the root and the deepest leaf node
      */
-    ssize_t height();
+    ssize_t height() const;
 
     /**
      * @return the total number of nodes in the tree
      */
-    ssize_t count_nodes();
+    ssize_t count_nodes() const;
 
     /**
      * Prints the tree in horizontal tree notation.
@@ -79,7 +79,7 @@ public:
      * @param tree tree
      * @return output stream
      */
-    pretty_print_s<T> pretty()
+    pretty_print_s<T> pretty() const
     {
         return {*this};
     }
@@ -111,7 +111,9 @@ public:
     template<typename U>
     friend std::ostream& operator<<(std::ostream& os, const pretty_print_s<U>& tree);
 
-public:
+    const Node<T>& get_root_node() const;
+
+private:
     Node<T> root_node;
 };
 
@@ -156,13 +158,13 @@ void pretty_print(std::ostream& os, const std::string& prefix, const Node<T>* no
 }
 
 template<typename T>
-ssize_t Tree<T>::height()
+ssize_t Tree<T>::height() const
 {
     return 1 + root_node.height();
 }
 
 template<typename T>
-ssize_t Tree<T>::count_nodes()
+ssize_t Tree<T>::count_nodes() const
 {
     return root_node.count_nodes();
 }
@@ -178,6 +180,12 @@ void Tree<T>::remove(T value)
 {
     remove_rec(value, &root_node.left_child);
     remove_rec(value, &root_node.right_child);
+}
+
+template<typename T>
+const Node<T>& Tree<T>::get_root_node() const
+{
+    return root_node;
 }
 
 template<typename T>

@@ -43,7 +43,7 @@ public:
      * Performs an in-order traversal of the tree.
      * @return nodes, in order of traversal
      */
-    std::vector<Node<T>*> iterate_left_hand();
+    std::vector<const Node<T>*> iterate_left_hand() const;
 
     T get_value() const
     {
@@ -84,12 +84,12 @@ public:
     /**
      * @return the height of the node, i.e. the largest number of edges between the node and the deepest child node
      */
-    ssize_t height();
+    ssize_t height() const;
 
     /**
      * @return the total number of nodes in the subtree
      */
-    ssize_t count_nodes();
+    ssize_t count_nodes() const;
 
     /**
      * @see std::ostream& operator<<(std::ostream& os, const Tree<U>& tree)
@@ -124,7 +124,7 @@ void Node<T>::remove_all_children()
 }
 
 template<typename T>
-ssize_t Node<T>::height()
+ssize_t Node<T>::height() const
 {
     if (left_child && right_child)
         return std::max(left_child->height(), right_child->height()) + 1;
@@ -137,12 +137,12 @@ ssize_t Node<T>::height()
 }
 
 template<typename T>
-std::vector<Node<T>*> Node<T>::iterate_left_hand()
+std::vector<const Node<T>*> Node<T>::iterate_left_hand() const
 {
-    std::vector<Node<T>*> vec{};
+    std::vector<const Node<T>*> vec{};
 
-    std::stack<Node<T>*> s;
-    Node<T>* curr = this;
+    std::stack<const Node<T>*> s;
+    const Node<T>* curr = this;
 
     while (curr != nullptr || !s.empty())
     {
@@ -190,7 +190,7 @@ std::ostream& operator<<(std::ostream& os, const Node<U>& node)
 }
 
 template<typename T>
-ssize_t Node<T>::count_nodes()
+ssize_t Node<T>::count_nodes() const
 {
     ssize_t result = 1;
 
