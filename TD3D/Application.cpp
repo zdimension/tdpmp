@@ -3,107 +3,110 @@
 //
 
 #include "Application.hpp"
+#include <vector>
+#include <iostream>
+#include "Cube.hpp"
+#include <ranges>
+#include <memory>
+
+struct RotatingCube : public Cube
+{
+    void update(Uint32 elapsed) override
+    {
+        Cube::update(elapsed);
+
+        angle.x += rotSpeed * elapsed;
+        angle.z += rotSpeed * elapsed;
+    }
+
+    double rotSpeed;
+
+    RotatingCube(const Vector3d& size, const Vector3d& position, const Vector3d& angle,
+                 const std::optional<Color>& color, double rotSpeed) : Cube(size, position, angle, color),
+                                                                       rotSpeed(rotSpeed)
+    {
+    }
+};
 
 void Application::run()
 {
-    SDL_Event event;
+    std::vector<std::unique_ptr<Cube>> cubes;
+    // axes
+    cubes.push_back(std::make_unique<Cube>(Cube{{0.2, 0.2, 0.2},
+                                                {0,   0,   0},
+                                                {0,   0,   0},
+                                                {{255, 255, 0}}}));
+    cubes.push_back(std::make_unique<Cube>(Cube{{1,   0.1, 0.1},
+                                                {0.5, 0,   0},
+                                                {0,   0,   0},
+                                                {{255, 0, 0}}}));
+    cubes.push_back(std::make_unique<Cube>(Cube{{0.1, 1,   0.1},
+                                                {0,   0.5, 0},
+                                                {0,   0,   0},
+                                                {{0, 255, 0}}}));
+    cubes.push_back(std::make_unique<Cube>(Cube{{0.1, 0.1, 1},
+                                                {0,   0,   0.5},
+                                                {0,   0,   0},
+                                                {{0, 0, 255}}}));
 
-    Uint32 last_time = SDL_GetTicks();
-    Uint32 current_time, elapsed_time;
-    Uint32 start_time;
 
-    double angleX = 0, angleZ = 0;
-
-    for (;;)
+    double speed = 0.05;
+    for (int i = 1; i < 10; speed = -speed, i++)
     {
-        start_time = SDL_GetTicks();
-        while (SDL_PollEvent(&event))
-        {
-            switch (event.type)
-            {
-                case SDL_WINDOWEVENT:
-                    if (m_event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                        m_camera->resizeWindow(windowWidth, windowHeight);
-                        glViewport(0, 0, windowWidth, windowHeight);
-
-                        logFileStderr("MESSAGE:Resizing window...\n");
-                        resizeWindow(m_event.window.data1, m_event.window.data2);
-                    }
-                    break;
-                case SDL_QUIT:
-                    exit(0);
-            }
-        }
-
-        current_time = SDL_GetTicks();
-        elapsed_time = current_time - last_time;
-        last_time = current_time;
-
-        angleZ += 0.05 * elapsed_time;
-        angleX += 0.05 * elapsed_time;
-
-        drawCube(angleX, angleZ);
-
-        elapsed_time = SDL_GetTicks() - start_time;
-        if (elapsed_time < 10)
-        {
-            SDL_Delay(10 - elapsed_time);
-        }
+        cubes.push_back(std::make_unique<RotatingCube>(
+                RotatingCube{{i / 10.0, i / 10.0, i / 10.0},
+                             {2.0 * (i - 5.0), 0, 0},
+                             {0, 0, 0}, {}, speed}));
     }
+
+    Vector3d camera(3, 3, 3);
+
+
+    const auto& mouse = m_renderer.getSdlWindow().getInputStatus();
+    const Uint8* keystate = mouse.keys;
+    struct { bool moving; int x, y; } oldmouse;
+
+    m_renderer.runLoop(
+            [&cubes, &camera, &keystate, &mouse, &oldmouse](Uint32 elapsed_time)
+            {
+                const double delta_angle = elapsed_time / 1000.0;
+
+                if (keystate[SDL_SCANCODE_LEFT])
+                    camera = camera.rotate(-delta_angle, Axis::Y);
+                else if (keystate[SDL_SCANCODE_RIGHT])
+                    camera = camera.rotate(delta_angle, Axis::Y);
+
+                if (keystate[SDL_SCANCODE_UP])
+                    camera = camera.rotate(delta_angle, Axis::LAT);
+                else if (keystate[SDL_SCANCODE_DOWN])
+                    camera = camera.rotate(-delta_angle, Axis::LAT);
+
+                if (mouse.scrolled)
+                    camera = camera * (mouse.dy > 0 ? 0.9 : (1 / 0.9));
+
+                if (mouse.buttons & SDL_BUTTON_LMASK)
+                {
+                    if (oldmouse.moving)
+                    {
+                        camera = camera.rotate((mouse.mx - oldmouse.x) * -delta_angle, Axis::Y);
+                        camera = camera.rotate((mouse.my - oldmouse.y) * delta_angle, Axis::LAT);
+                    }
+
+                    oldmouse = {true, mouse.mx, mouse.my};
+                }
+                else
+                    oldmouse.moving = false;
+
+                glMatrixMode(GL_MODELVIEW);
+                glLoadIdentity();
+
+                gluLookAt(camera.x, camera.y, camera.z, 0, 0, 0, 0, 1, 0);
+
+                for (auto& cube: cubes)
+                {
+                    cube->update(elapsed_time);
+                    cube->draw();
+                }
+            });
 }
 
-void Application::drawCube(double angleX, double angleZ)
-{
-    m_renderer.clear();
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    gluLookAt(3, 4, 2, 0, 0, 0, 0, 0, 1);
-
-    glRotated(angleZ, 0, 0, 1);
-    glRotated(angleX, 1, 0, 0);
-
-    glBegin(GL_QUADS);
-
-    glColor3ub(255, 0, 0); //face rouge
-    glVertex3d(1, 1, 1);
-    glVertex3d(1, 1, -1);
-    glVertex3d(-1, 1, -1);
-    glVertex3d(-1, 1, 1);
-
-    glColor3ub(0, 255, 0); //face verte
-    glVertex3d(1, -1, 1);
-    glVertex3d(1, -1, -1);
-    glVertex3d(1, 1, -1);
-    glVertex3d(1, 1, 1);
-
-    glColor3ub(0, 0, 255); //face bleue
-    glVertex3d(-1, -1, 1);
-    glVertex3d(-1, -1, -1);
-    glVertex3d(1, -1, -1);
-    glVertex3d(1, -1, 1);
-
-    glColor3ub(255, 255, 0); //face jaune
-    glVertex3d(-1, 1, 1);
-    glVertex3d(-1, 1, -1);
-    glVertex3d(-1, -1, -1);
-    glVertex3d(-1, -1, 1);
-
-    glColor3ub(0, 255, 255); //face cyan
-    glVertex3d(1, 1, -1);
-    glVertex3d(1, -1, -1);
-    glVertex3d(-1, -1, -1);
-    glVertex3d(-1, 1, -1);
-
-    glColor3ub(255, 0, 255); //face magenta
-    glVertex3d(1, -1, 1);
-    glVertex3d(1, 1, 1);
-    glVertex3d(-1, 1, 1);
-    glVertex3d(-1, -1, 1);
-
-    glEnd();
-
-    glFlush();
-    m_renderer.swap();
-}

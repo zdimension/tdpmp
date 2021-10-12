@@ -12,6 +12,7 @@
 #include "Window.hpp"
 #include "Dimension.hpp"
 #include <string>
+#include <functional>
 
 class Renderer
 {
@@ -44,6 +45,22 @@ public:
     void swap()
     {
         m_window.swap();
+    }
+
+    void runLoop(const std::function<void(Uint32)>& loop)
+    {
+        m_window.runLoop(
+                [this, loop](Uint32 elapsed)
+                {
+                    clear();
+                    loop(elapsed);
+                    swap();
+                });
+    }
+
+    const Window& getSdlWindow() const
+    {
+        return m_window;
     }
 
 private:

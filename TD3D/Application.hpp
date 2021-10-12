@@ -12,13 +12,11 @@ class Application
 {
 public:
     Application()
-            : m_renderer(Dimension(640, 480))
+            : m_renderer(Dimension(800, 600))
     {
     }
 
     void run();
-
-    void drawCube(double angleX, double angleZ);
 
 private:
     Renderer m_renderer;

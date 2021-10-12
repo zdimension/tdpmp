@@ -11,6 +11,7 @@
 #include <SDL2/SDL.h>
 #include "Dimension.hpp"
 #include <string>
+#include <functional>
 
 class Window
 {
@@ -18,12 +19,14 @@ public:
     Window(const Dimension& size, const std::string& title)
             : m_window(
             SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.width, size.height,
-                             SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN))
+                             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
     {
         if (m_window == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
         }
+
+        m_inputStatus.keys = SDL_GetKeyboardState(nullptr);
     }
 
     ~Window()
@@ -41,8 +44,64 @@ public:
         return m_window;
     }
 
+    void runLoop(const std::function<void(Uint32)>& loop)
+    {
+        SDL_Event event;
+
+        Uint32 last_time = SDL_GetTicks();
+        Uint32 current_time, elapsed_time;
+        Uint32 start_time;
+
+        for (;;)
+        {
+            start_time = SDL_GetTicks();
+
+            m_inputStatus.buttons = SDL_GetMouseState(&m_inputStatus.mx, &m_inputStatus.my);
+            m_inputStatus.scrolled = false;
+
+            while (SDL_PollEvent(&event))
+            {
+                switch (event.type)
+                {
+                    case SDL_MOUSEWHEEL:
+                        m_inputStatus.scrolled = true;
+                        m_inputStatus.dx = event.wheel.x;
+                        m_inputStatus.dy = event.wheel.y;
+                        break;
+                    case SDL_QUIT:
+                        return;
+                }
+            }
+
+            current_time = SDL_GetTicks();
+            elapsed_time = current_time - last_time;
+            last_time = current_time;
+
+            loop(elapsed_time);
+
+            elapsed_time = SDL_GetTicks() - start_time;
+            if (elapsed_time < 10)
+            {
+                SDL_Delay(10 - elapsed_time);
+            }
+        }
+    }
+
+    const auto& getInputStatus() const
+    {
+        return m_inputStatus;
+    }
+
 private:
     SDL_Window* m_window;
+    struct
+    {
+        const Uint8* keys;
+        Uint32 buttons;
+        int mx, my;
+        bool scrolled;
+        int dx, dy;
+    } m_inputStatus;
 };
 
 #endif //TD3D_WINDOW_HPP
