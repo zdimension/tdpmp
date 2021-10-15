@@ -8,12 +8,13 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "Vector3d.hpp"
-#include "Color.hpp"
+#include "../primitives/Vector3d.hpp"
+#include "../primitives/Color.hpp"
+#include "Entity.hpp"
 #include <optional>
 #include <SDL2/SDL.h>
 
-struct Cube
+struct Cube : public Entity
 {
     constexpr Cube(const Vector3d& size, const Vector3d& position, const Vector3d& angle,
                    const std::optional<Color>& color = {})
@@ -21,9 +22,9 @@ struct Cube
     {
     }
 
-    void draw() const;
+    void draw() const override;
 
-    virtual void update(Uint32 elapsed)
+    void update(Uint32 elapsed) override
     {
     };
 

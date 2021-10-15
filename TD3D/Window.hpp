@@ -9,7 +9,7 @@
 #include <GL/gl.h>
 #include <stdexcept>
 #include <SDL2/SDL.h>
-#include "Dimension.hpp"
+#include "primitives/Dimension.hpp"
 #include <string>
 #include <functional>
 

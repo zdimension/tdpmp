@@ -4,92 +4,49 @@
 
 #include "Application.hpp"
 #include <vector>
-#include <iostream>
-#include "Cube.hpp"
-#include <ranges>
-#include <memory>
-
-struct RotatingCube : public Cube
-{
-    void update(Uint32 elapsed) override
-    {
-        Cube::update(elapsed);
-
-        angle.x += rotSpeed * elapsed;
-        angle.z += rotSpeed * elapsed;
-    }
-
-    double rotSpeed;
-
-    RotatingCube(const Vector3d& size, const Vector3d& position, const Vector3d& angle,
-                 const std::optional<Color>& color, double rotSpeed) : Cube(size, position, angle, color),
-                                                                       rotSpeed(rotSpeed)
-    {
-    }
-};
+#include "shapes/Cube.hpp"
+#include "scenes/Orbits.hpp"
 
 void Application::run()
 {
-    std::vector<std::unique_ptr<Cube>> cubes;
-    // axes
-    cubes.push_back(std::make_unique<Cube>(Cube{{0.2, 0.2, 0.2},
-                                                {0,   0,   0},
-                                                {0,   0,   0},
-                                                {{255, 255, 0}}}));
-    cubes.push_back(std::make_unique<Cube>(Cube{{1,   0.1, 0.1},
-                                                {0.5, 0,   0},
-                                                {0,   0,   0},
-                                                {{255, 0, 0}}}));
-    cubes.push_back(std::make_unique<Cube>(Cube{{0.1, 1,   0.1},
-                                                {0,   0.5, 0},
-                                                {0,   0,   0},
-                                                {{0, 255, 0}}}));
-    cubes.push_back(std::make_unique<Cube>(Cube{{0.1, 0.1, 1},
-                                                {0,   0,   0.5},
-                                                {0,   0,   0},
-                                                {{0, 0, 255}}}));
-
-
-    double speed = 0.05;
-    for (int i = 1; i < 10; speed = -speed, i++)
+    struct
     {
-        cubes.push_back(std::make_unique<RotatingCube>(
-                RotatingCube{{i / 10.0, i / 10.0, i / 10.0},
-                             {2.0 * (i - 5.0), 0, 0},
-                             {0, 0, 0}, {}, speed}));
-    }
-
-    Vector3d camera(3, 3, 3);
-
+        double lat, lon, norm;
+        double px, pz;
+    } camera = {20, 45, 5, 0, 0};
 
     const auto& mouse = m_renderer.getSdlWindow().getInputStatus();
     const Uint8* keystate = mouse.keys;
-    struct { bool moving; int x, y; } oldmouse;
+    struct
+    {
+        bool moving;
+        int x, y;
+    } oldmouse{}, oldpan{};
+    auto& scene = this->m_scene;
 
     m_renderer.runLoop(
-            [&cubes, &camera, &keystate, &mouse, &oldmouse](Uint32 elapsed_time)
+            [&camera, &keystate, &mouse, &oldmouse, &scene, &oldpan](Uint32 elapsed_time)
             {
-                const double delta_angle = elapsed_time / 1000.0;
+                const double rotate_speed = elapsed_time / 50.0;
 
                 if (keystate[SDL_SCANCODE_LEFT])
-                    camera = camera.rotate(-delta_angle, Axis::Y);
+                    camera.lon -= rotate_speed;
                 else if (keystate[SDL_SCANCODE_RIGHT])
-                    camera = camera.rotate(delta_angle, Axis::Y);
-
+                    camera.lon += rotate_speed;
                 if (keystate[SDL_SCANCODE_UP])
-                    camera = camera.rotate(delta_angle, Axis::LAT);
+                    camera.lat += rotate_speed;
                 else if (keystate[SDL_SCANCODE_DOWN])
-                    camera = camera.rotate(-delta_angle, Axis::LAT);
+                    camera.lat -= rotate_speed;
 
                 if (mouse.scrolled)
-                    camera = camera * (mouse.dy > 0 ? 0.9 : (1 / 0.9));
+                    camera.norm *= (mouse.dy > 0 ? 0.9 : (1 / 0.9));
 
                 if (mouse.buttons & SDL_BUTTON_LMASK)
                 {
                     if (oldmouse.moving)
                     {
-                        camera = camera.rotate((mouse.mx - oldmouse.x) * -delta_angle, Axis::Y);
-                        camera = camera.rotate((mouse.my - oldmouse.y) * delta_angle, Axis::LAT);
+                        camera.lon += (mouse.mx - oldmouse.x) * rotate_speed;
+                        camera.lat += (mouse.my - oldmouse.y) * rotate_speed;
                     }
 
                     oldmouse = {true, mouse.mx, mouse.my};
@@ -97,16 +54,41 @@ void Application::run()
                 else
                     oldmouse.moving = false;
 
+
+                if (mouse.buttons & SDL_BUTTON_RMASK)
+                {
+                    if (oldpan.moving)
+                    {
+                        const double pan_speed = camera.norm * elapsed_time / 4000.0;
+                        camera.px += (mouse.mx - oldpan.x) * pan_speed;
+                        camera.pz += (mouse.my - oldpan.y) * pan_speed;
+                    }
+
+                    oldpan = {true, mouse.mx, mouse.my};
+                }
+                else
+                    oldpan.moving = false;
+
                 glMatrixMode(GL_MODELVIEW);
                 glLoadIdentity();
 
-                gluLookAt(camera.x, camera.y, camera.z, 0, 0, 0, 0, 1, 0);
+                glTranslated(0, 0, -camera.norm);
 
-                for (auto& cube: cubes)
-                {
-                    cube->update(elapsed_time);
-                    cube->draw();
-                }
+                // arcball rotation
+                glRotated(camera.lat, 1, 0, 0);
+                glRotated(camera.lon, 0, 1, 0);
+
+                // panning
+                auto pan_rot = Vector3d(camera.px, 0, camera.pz).rotate(rad(-camera.lon), Axis::Y);
+                glTranslated(pan_rot.x, 0, pan_rot.z);
+
+                scene->update(elapsed_time);
+                scene->draw();
             });
+}
+
+Application::Application()
+        : m_renderer(Dimension(1024, 768)), m_scene(std::make_unique<Orbits>())
+{
 }
 

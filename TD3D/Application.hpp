@@ -5,21 +5,21 @@
 #ifndef TD3D_APPLICATION_HPP
 #define TD3D_APPLICATION_HPP
 
-#include "Dimension.hpp"
+#include "primitives/Dimension.hpp"
 #include "Renderer.hpp"
+#include "scenes/Scene.hpp"
+#include "scenes/RotatingCubes.hpp"
 
 class Application
 {
 public:
-    Application()
-            : m_renderer(Dimension(800, 600))
-    {
-    }
+    Application();
 
     void run();
 
 private:
     Renderer m_renderer;
+    std::unique_ptr<Scene> m_scene;
 };
 
 #endif //TD3D_APPLICATION_HPP

@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <SDL2/SDL.h>
 #include "Window.hpp"
-#include "Dimension.hpp"
+#include "primitives/Dimension.hpp"
 #include <string>
 #include <functional>
 
@@ -30,6 +30,9 @@ public:
         gluPerspective(70, size.getAspectRatio(), 1, 1000);
 
         glEnable(GL_DEPTH_TEST);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
     }
 
     ~Renderer()

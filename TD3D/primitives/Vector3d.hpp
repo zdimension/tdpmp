@@ -16,8 +16,15 @@ enum class Axis
     LAT
 };
 
+constexpr double rad(double deg)
+{
+    return deg * M_PI / 180;
+}
+
 struct Vector3d
 {
+    constexpr Vector3d() = default;
+
     constexpr Vector3d(double x, double y, double z)
             : x(x), y(y), z(z)
     {
@@ -40,15 +47,56 @@ struct Vector3d
                 double norm = sqrt(x * x + y * y + z * z);
                 double lat = asin(y / norm) + theta;
                 double lon = atan2(z, x);
-                return Vector3d{cos(lat) * cos(lon), sin(lat), cos(lat) * sin(lon)} * norm;
+                return from_latlon(lat, lon) * norm;
         }
 
         throw std::invalid_argument("Invalid axis");
     }
 
-    Vector3d operator*(double factor) const
+    static Vector3d from_latlon(double lat, double lon)
+    {
+        return Vector3d{cos(lat) * cos(lon), sin(lat), cos(lat) * sin(lon)};
+    }
+
+    constexpr Vector3d operator*(double factor) const
     {
         return {x * factor, y * factor, z * factor};
+    }
+
+    constexpr Vector3d operator/(double factor) const
+    {
+        return {x / factor, y / factor, z / factor};
+    }
+
+    constexpr Vector3d operator+(const Vector3d& other) const
+    {
+        return {x + other.x, y + other.y, z + other.z};
+    }
+
+    constexpr Vector3d operator-(const Vector3d& other) const
+    {
+        return {x - other.x, y - other.y, z - other.z};
+    }
+
+    constexpr Vector3d& operator+=(const Vector3d& other)
+    {
+        *this = *this + other;
+        return *this;
+    }
+
+    constexpr double normSquared() const
+    {
+        return x * x + y * y + z * z;
+    }
+
+    constexpr double norm() const
+    {
+        return sqrt(normSquared());
+    }
+
+    constexpr Vector3d normalize() const
+    {
+        return *this / norm();
     }
 
     double x;
