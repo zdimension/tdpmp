@@ -5,7 +5,7 @@
 #ifndef TD3D_ORBITS_HPP
 #define TD3D_ORBITS_HPP
 
-#include "../shapes/Cube.hpp"
+#include "../entities/Cube.hpp"
 #include "Scene.hpp"
 #include <array>
 
@@ -20,18 +20,17 @@ struct PhysicalCube : public Cube
 
     void draw() const override
     {
-
         glBegin(GL_LINE_STRIP);
-        int i = trail_length;
-        int p = trail_pos;
+        size_t i = trail_length;
+        size_t p = trail_pos;
         for (; i > 0; i--)
         {
-            if (--p < 0)
+            if (p-- == 0)
             {
                 p = trail.size() - 1;
             }
             const Vector3d& v = trail[p];
-            glColor4ub(color->r, color->g, color->b, (GLubyte) (255.0 * i / trail_length));
+            glColor4ub(color->r, color->g, color->b, (GLubyte) (255.0l * i / trail_length));
             glVertex3d(v.x, v.y, v.z);
         }
         glEnd();
@@ -74,8 +73,8 @@ struct PhysicalCube : public Cube
 private:
     std::array<Vector3d, 1600> trail;
     Uint32 trail_last_ticks = 0;
-    int trail_pos = 0;
-    int trail_length = 0;
+    size_t trail_pos = 0;
+    size_t trail_length = 0;
 };
 
 

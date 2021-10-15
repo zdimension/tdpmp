@@ -3,6 +3,7 @@
 //
 
 #include "Cube.hpp"
+#include <GL/gl.h>
 
 void Cube::draw() const
 {

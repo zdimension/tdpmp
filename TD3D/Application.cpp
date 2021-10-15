@@ -3,8 +3,6 @@
 //
 
 #include "Application.hpp"
-#include <vector>
-#include "shapes/Cube.hpp"
 #include "scenes/Orbits.hpp"
 
 void Application::run()

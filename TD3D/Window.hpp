@@ -39,7 +39,7 @@ public:
         SDL_GL_SwapWindow(m_window);
     }
 
-    SDL_Window* getWindowHandle() const
+    SDL_Window* getRawWindowHandle() const
     {
         return m_window;
     }

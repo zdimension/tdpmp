@@ -8,31 +8,12 @@
 
 #include <vector>
 #include <memory>
-#include "../shapes/Cube.hpp"
+#include "../entities/Cube.hpp"
 
 class Scene : public Entity
 {
 public:
-    Scene() : objects()
-    {
-        // trièdre
-        add({{0.2, 0.2, 0.2},
-             {0,   0,   0},
-             {0,   0,   0},
-             {{255, 255, 0}}});
-        add({{1,   0.1, 0.1},
-             {0.5, 0,   0},
-             {0,   0,   0},
-             {{255, 0, 0}}});
-        add({{0.1, 1,   0.1},
-             {0,   0.5, 0},
-             {0,   0,   0},
-             {{0, 255, 0}}});
-        add({{0.1, 0.1, 1},
-             {0,   0,   0.5},
-             {0,   0,   0},
-             {{0, 0, 255}}});
-    }
+    Scene();
 
     void add(Cube&& object)
     {
@@ -46,7 +27,7 @@ public:
     }
 
 public:
-    virtual void draw() const override
+    void draw() const override
     {
         for (auto& object: objects)
         {
@@ -54,7 +35,7 @@ public:
         }
     }
 
-    virtual void update(Uint32 elapsed) override
+    void update(Uint32 elapsed) override
     {
         for (auto& object: objects)
         {

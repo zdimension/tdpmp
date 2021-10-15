@@ -5,14 +5,10 @@
 #ifndef TD3D_CUBE_HPP
 #define TD3D_CUBE_HPP
 
-
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "../primitives/Vector3d.hpp"
 #include "../primitives/Color.hpp"
 #include "Entity.hpp"
 #include <optional>
-#include <SDL2/SDL.h>
 
 struct Cube : public Entity
 {

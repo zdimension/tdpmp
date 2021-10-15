@@ -18,7 +18,7 @@ class Renderer
 {
 public:
     explicit Renderer(const Dimension& size)
-            : m_window(size, "SDL GL Application"), m_glContext(SDL_GL_CreateContext(m_window.getWindowHandle()))
+            : m_window(size, "SDL GL Application"), m_glContext(SDL_GL_CreateContext(m_window.getRawWindowHandle()))
     {
         if (m_glContext == nullptr)
         {
