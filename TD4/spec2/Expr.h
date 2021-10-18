@@ -12,6 +12,8 @@
 #define _EXPR_H_
 
 #include <stdexcept>
+#include <memory>
+#include <iostream>
 
 // The abstract classes
 
@@ -22,13 +24,16 @@ public:
     class ZeroDivide : public std::exception
     {
     public:
-        const char* what() const throw()
+        const char* what() const noexcept
         {
             return "Division by 0";
         }
     };
 
     virtual int eval() = 0;
+    virtual std::unique_ptr<Expr> clone() const = 0;
+
+    virtual ~Expr() = default;
 };
 
 

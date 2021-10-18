@@ -20,11 +20,16 @@ class Constant : public Expr
 private:
     const int val;
 public:
-    Constant(int v) : val(v)
+    Constant(int v) : val(v) // NOLINT(google-explicit-constructor)
+    {
+    }
+
+    Constant(const Constant& orig) : Constant(orig.val)
     {
     }
 
     int eval() override;
+    std::unique_ptr<Expr> clone() const override;
 };
 
 #endif

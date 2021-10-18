@@ -48,7 +48,7 @@ int main()
 
 
 
-// anExpr = (2 + 3)*4 
+// anExpr = (2 + 3)*4
     Binary_Mult anExpr(e2plus3, quatre);
 
      cout << "3 = "  << trois.eval()  << endl;

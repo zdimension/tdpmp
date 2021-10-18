@@ -21,7 +21,12 @@ public:
     {
     }
 
+    Binary_Div(const Binary_Div& orig) : Binary_Div(*orig.opl, *orig.opr)
+    {
+    }
+
     int eval() override;
+    std::unique_ptr<Expr> clone() const override;
 };
 
 #endif

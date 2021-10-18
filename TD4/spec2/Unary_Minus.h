@@ -22,7 +22,12 @@ public:
     {
     }
 
+    Unary_Minus(const Unary_Minus& orig) : Unary_Minus(*orig.op)
+    {
+    }
+
     int eval() override;
+    std::unique_ptr<Expr> clone() const override;
 };
 
 

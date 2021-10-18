@@ -11,5 +11,10 @@
 
 int Binary_Plus::eval()
 {
-    return opl.eval() + opr.eval();
+    return opl->eval() + opr->eval();
+}
+
+std::unique_ptr<Expr> Binary_Plus::clone() const
+{
+    return std::make_unique<Binary_Plus>(*this);
 }

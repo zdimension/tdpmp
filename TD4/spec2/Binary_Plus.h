@@ -21,7 +21,12 @@ public:
     {
     }
 
+    Binary_Plus(const Binary_Plus& orig) : Binary_Plus(*orig.opl, *orig.opr)
+    {
+    }
+
     int eval() override;
+    std::unique_ptr<Expr> clone() const override;
 };
 
 

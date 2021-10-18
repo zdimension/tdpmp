@@ -11,14 +11,15 @@
 #ifndef _UNARY_EXPR_H_
 #define _UNARY_EXPR_H_
 
+#include <memory>
 #include "Expr.h"
 
 class Unary_Expr : public Expr
 {
 protected:
-    Expr& op;
+    std::unique_ptr<Expr> op;
 public:
-    Unary_Expr(Expr& pe) : op(pe)
+    Unary_Expr(Expr& pe) : op(pe.clone())
     {
     }
 };

@@ -21,7 +21,12 @@ public:
     {
     }
 
+    Binary_Mult(const Binary_Mult& orig) : Binary_Mult(*orig.opl, *orig.opr)
+    {
+    }
+
     int eval() override;
+    std::unique_ptr<Expr> clone() const override;
 };
 
 

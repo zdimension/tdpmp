@@ -11,5 +11,10 @@
 
 int Binary_Mult::eval()
 {
-    return opl.eval() * opr.eval();
+    return opl->eval() * opr->eval();
+}
+
+std::unique_ptr<Expr> Binary_Mult::clone() const
+{
+    return std::make_unique<Binary_Mult>(*this);
 }

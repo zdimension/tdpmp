@@ -11,5 +11,10 @@
 
 int Unary_Plus::eval()
 {
-    return op.eval();
+    return op->eval();
+}
+
+std::unique_ptr<Expr> Unary_Plus::clone() const
+{
+    return std::make_unique<Unary_Plus>(*this);
 }
