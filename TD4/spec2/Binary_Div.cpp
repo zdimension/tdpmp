@@ -11,7 +11,10 @@
 
 int Binary_Div::eval() const
 {
-    return opl->eval() / opr->eval();
+    int right = opr->eval();
+    if (right == 0)
+        throw ZeroDivide();
+    return opl->eval() / right;
 }
 
 std::unique_ptr<const Expr> Binary_Div::clone() const

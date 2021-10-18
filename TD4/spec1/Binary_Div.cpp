@@ -11,5 +11,8 @@
 
 int Binary_Div::eval()
 {
-    return opl.eval() / opr.eval();
+    int right = opr.eval();
+    if (right == 0)
+        throw ZeroDivide();
+    return opl.eval() / right;
 }
