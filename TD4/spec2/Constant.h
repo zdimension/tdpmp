@@ -28,8 +28,8 @@ public:
     {
     }
 
-    int eval() override;
-    std::unique_ptr<Expr> clone() const override;
+    int eval() const override;
+    std::unique_ptr<const Expr> clone() const override;
 };
 
 #endif

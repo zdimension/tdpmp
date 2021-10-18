@@ -16,10 +16,10 @@
 class Binary_Expr : public Expr
 {
 protected:
-    std::unique_ptr<Expr> opl;
-    std::unique_ptr<Expr> opr;
+    std::unique_ptr<const Expr> opl;
+    std::unique_ptr<const Expr> opr;
 public:
-    Binary_Expr(Expr& pe1, Expr& pe2) : opl(pe1.clone()), opr(pe2.clone())
+    Binary_Expr(const Expr& pe1, const Expr& pe2) : opl(pe1.clone()), opr(pe2.clone())
     {
     }
 };

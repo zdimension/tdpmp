@@ -9,12 +9,12 @@
 
 #include "Constant.h"
 
-int Constant::eval()
+int Constant::eval() const
 {
     return val;
 }
 
-std::unique_ptr<Expr> Constant::clone() const
+std::unique_ptr<const Expr> Constant::clone() const
 {
-    return std::make_unique<Constant>(*this);
+    return std::make_unique<const Constant>(*this);
 }

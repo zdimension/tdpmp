@@ -30,8 +30,8 @@ public:
         }
     };
 
-    virtual int eval() = 0;
-    virtual std::unique_ptr<Expr> clone() const = 0;
+    virtual int eval() const = 0;
+    virtual std::unique_ptr<const Expr> clone() const = 0;
 
     virtual ~Expr() = default;
 };

@@ -7,14 +7,14 @@
 //=======================================================================
 
 
-#include "Binary_Plus.h"
+#include "Binary_Mod.h"
 
-int Binary_Plus::eval() const
+int Binary_Mod::eval() const
 {
-    return opl->eval() + opr->eval();
+    return opl->eval() % opr->eval();
 }
 
-std::unique_ptr<const Expr> Binary_Plus::clone() const
+std::unique_ptr<const Expr> Binary_Mod::clone() const
 {
-    return std::make_unique<const Binary_Plus>(*this);
+    return std::make_unique<const Binary_Mod>(*this);
 }

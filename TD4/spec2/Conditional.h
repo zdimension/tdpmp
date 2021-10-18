@@ -2,32 +2,34 @@
 //class Expression
 //      Specification and implementation
 //-----------------------------------------------------------------------
-// WTFPL
 // Julien DeAntoni (inspired from Jean-Paul Rigault course)
 // April 2010
 //=======================================================================
 
 
-#ifndef _BINARY_PLUS_H_
-#define _BINARY_PLUS_H_
+#ifndef _CONDITIONAL_H_
+#define _CONDITIONAL_H_
 
-#include "Binary_Expr.h"
+#include <memory>
+#include "Expr.h"
 
-
-class Binary_Plus : public Binary_Expr
+class Conditional : public Expr
 {
+protected:
+    std::unique_ptr<const Expr> condition;
+    std::unique_ptr<const Expr> opl;
+    std::unique_ptr<const Expr> opr;
 public:
-    Binary_Plus(const Expr& pe1, const Expr& pe2) : Binary_Expr(pe1, pe2)
+    Conditional(const Expr& cond, const Expr& pe1, const Expr& pe2) : condition(cond.clone()), opl(pe1.clone()), opr(pe2.clone())
     {
     }
 
-    Binary_Plus(const Binary_Plus& orig) : Binary_Plus(*orig.opl, *orig.opr)
+    Conditional(const Conditional& orig) : Conditional(*orig.condition, *orig.opl, *orig.opr)
     {
     }
 
     int eval() const override;
     std::unique_ptr<const Expr> clone() const override;
 };
-
 
 #endif

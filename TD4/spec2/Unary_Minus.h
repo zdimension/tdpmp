@@ -18,7 +18,7 @@
 class Unary_Minus : public Unary_Expr
 {
 public:
-    Unary_Minus(Expr& pe) : Unary_Expr(pe)
+    Unary_Minus(const Expr& pe) : Unary_Expr(pe)
     {
     }
 
@@ -26,8 +26,8 @@ public:
     {
     }
 
-    int eval() override;
-    std::unique_ptr<Expr> clone() const override;
+    int eval() const override;
+    std::unique_ptr<const Expr> clone() const override;
 };
 
 

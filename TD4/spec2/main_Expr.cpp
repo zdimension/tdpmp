@@ -17,6 +17,8 @@ using namespace std;
 #include "Constant.h"
 #include "Unary_Minus.h"
 #include "Unary_Plus.h"
+#include "Binary_Mod.h"
+#include "Conditional.h"
 
 
 int main()
@@ -51,10 +53,17 @@ int main()
 // anExpr = (2 + 3)*4
     Binary_Mult anExpr(e2plus3, quatre);
 
+
+    Binary_Mod modExpr(anExpr, Constant(16));
+
+    Conditional condExpr(modExpr, anExpr, e2plus3);
+
      cout << "3 = "  << trois.eval()  << endl;
      cout << "-3 = " << moinsTrois.eval() << endl;
      cout << "e1 = "  << e1.eval()  << endl;
      cout << "2 + 3 = "  << e2plus3.eval()  << endl;
      cout << "(2 + 3) * 4 = "  << anExpr.eval()  << endl;
+     cout << "((2 + 3) * 4) % 16 = "  << modExpr.eval()  << endl;
+     cout << "(((2 + 3) * 4) % 16) ? ((2+3)*4) : 2+3 = "  << condExpr.eval()  << endl;
 
 }

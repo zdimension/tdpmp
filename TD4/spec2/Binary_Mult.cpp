@@ -9,12 +9,12 @@
 
 #include "Binary_Mult.h"
 
-int Binary_Mult::eval()
+int Binary_Mult::eval() const
 {
     return opl->eval() * opr->eval();
 }
 
-std::unique_ptr<Expr> Binary_Mult::clone() const
+std::unique_ptr<const Expr> Binary_Mult::clone() const
 {
-    return std::make_unique<Binary_Mult>(*this);
+    return std::make_unique<const Binary_Mult>(*this);
 }

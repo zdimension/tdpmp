@@ -17,7 +17,7 @@
 class Binary_Div : public Binary_Expr
 {
 public:
-    Binary_Div(Expr& pe1, Expr& pe2) : Binary_Expr(pe1, pe2)
+    Binary_Div(const Expr& pe1, const Expr& pe2) : Binary_Expr(pe1, pe2)
     {
     }
 
@@ -25,8 +25,8 @@ public:
     {
     }
 
-    int eval() override;
-    std::unique_ptr<Expr> clone() const override;
+    int eval() const override;
+    std::unique_ptr<const Expr> clone() const override;
 };
 
 #endif

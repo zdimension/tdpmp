@@ -9,12 +9,12 @@
 
 #include "Binary_Div.h"
 
-int Binary_Div::eval()
+int Binary_Div::eval() const
 {
     return opl->eval() / opr->eval();
 }
 
-std::unique_ptr<Expr> Binary_Div::clone() const
+std::unique_ptr<const Expr> Binary_Div::clone() const
 {
-    return std::make_unique<Binary_Div>(*this);
+    return std::make_unique<const Binary_Div>(*this);
 }

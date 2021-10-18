@@ -17,9 +17,9 @@
 class Unary_Expr : public Expr
 {
 protected:
-    std::unique_ptr<Expr> op;
+    std::unique_ptr<const Expr> op;
 public:
-    Unary_Expr(Expr& pe) : op(pe.clone())
+    Unary_Expr(const Expr& pe) : op(pe.clone())
     {
     }
 };
