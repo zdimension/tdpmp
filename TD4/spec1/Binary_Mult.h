@@ -17,7 +17,7 @@
 class Binary_Mult : public Binary_Expr
 {
 public:
-    Binary_Mult(Expr* pe1, Expr* pe2) : Binary_Expr(pe1, pe2)
+    Binary_Mult(Expr& pe1, Expr& pe2) : Binary_Expr(pe1, pe2)
     {
     }
 

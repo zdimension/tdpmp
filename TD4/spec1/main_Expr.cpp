@@ -35,21 +35,21 @@ int main()
 
 
 // e00 = -3
-    Unary_Minus moinsTrois(&trois);
+    Unary_Minus moinsTrois(trois);
 
 // e1 = -3*3
-    Binary_Mult e1(&trois, &moinsTrois);
+    Binary_Mult e1(trois, moinsTrois);
 
 
 
 // e2plus3 = (2 + 3)
-    Binary_Plus e2plus3(&deux, &trois);
+    Binary_Plus e2plus3(deux, trois);
 
 
 
 
 // anExpr = (2 + 3)*4 
-    Binary_Mult anExpr(&e2plus3, &quatre);
+    Binary_Mult anExpr(e2plus3, quatre);
 
      cout << "3 = "  << trois.eval()  << endl;
      cout << "-3 = " << moinsTrois.eval() << endl;

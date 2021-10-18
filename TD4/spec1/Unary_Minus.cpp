@@ -10,5 +10,5 @@
 
 int Unary_Minus::eval()
 {
-    return -op->eval();
+    return -op.eval();
 }

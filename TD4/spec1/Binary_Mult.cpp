@@ -11,5 +11,5 @@
 
 int Binary_Mult::eval()
 {
-    return opl->eval() * opr->eval();
+    return opl.eval() * opr.eval();
 }

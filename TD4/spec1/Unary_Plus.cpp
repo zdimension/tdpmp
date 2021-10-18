@@ -11,5 +11,5 @@
 
 int Unary_Plus::eval()
 {
-    return op->eval();
+    return op.eval();
 }

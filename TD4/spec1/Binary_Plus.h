@@ -17,7 +17,7 @@
 class Binary_Plus : public Binary_Expr
 {
 public:
-    Binary_Plus(Expr* pe1, Expr* pe2) : Binary_Expr(pe1, pe2)
+    Binary_Plus(Expr& pe1, Expr& pe2) : Binary_Expr(pe1, pe2)
     {
     }
 

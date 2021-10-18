@@ -11,5 +11,5 @@
 
 int Binary_Plus::eval()
 {
-    return opl->eval() + opr->eval();
+    return opl.eval() + opr.eval();
 }

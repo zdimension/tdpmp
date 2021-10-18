@@ -18,7 +18,7 @@
 class Unary_Minus : public Unary_Expr
 {
 public:
-    Unary_Minus(Expr* pe) : Unary_Expr(pe)
+    Unary_Minus(Expr& pe) : Unary_Expr(pe)
     {
     }
 

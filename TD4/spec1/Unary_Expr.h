@@ -16,9 +16,9 @@
 class Unary_Expr : public Expr
 {
 protected:
-    Expr* op;
+    Expr& op;
 public:
-    Unary_Expr(Expr* pe) : op(pe)
+    Unary_Expr(Expr& pe) : op(pe)
     {
     }
 };

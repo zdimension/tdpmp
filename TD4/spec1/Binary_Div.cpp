@@ -11,5 +11,5 @@
 
 int Binary_Div::eval()
 {
-    return opl->eval() / opr->eval();
+    return opl.eval() / opr.eval();
 }

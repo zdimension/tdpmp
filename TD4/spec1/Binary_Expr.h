@@ -15,10 +15,10 @@
 class Binary_Expr : public Expr
 {
 protected:
-    Expr* opl;
-    Expr* opr;
+    Expr& opl;
+    Expr& opr;
 public:
-    Binary_Expr(Expr* pe1, Expr* pe2) : opl(pe1), opr(pe2)
+    Binary_Expr(Expr& pe1, Expr& pe2) : opl(pe1), opr(pe2)
     {
     }
 };
