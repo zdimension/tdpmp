@@ -12,14 +12,15 @@
 #include "primitives/Dimension.hpp"
 #include <string>
 #include <functional>
+#include <utility>
 
 class Window
 {
 public:
-    Window(const Dimension& size, const std::string& title)
-            : m_window(
-            SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.width, size.height,
-                             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
+    Window(const Dimension& size, std::string title)
+            : m_title(std::move(title)), m_window(
+            SDL_CreateWindow(m_title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.width, size.height,
+                             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN)), m_inputStatus({})
     {
         if (m_window == nullptr)
         {
@@ -93,6 +94,7 @@ public:
     }
 
 private:
+    std::string m_title;
     SDL_Window* m_window;
     struct
     {

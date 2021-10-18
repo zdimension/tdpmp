@@ -1,0 +1,1 @@
+valgrind --gen-suppressions=all --suppressions=./valgrind.sup --leak-check=full --show-leak-kinds=all cmake-build-debug/TD3D
