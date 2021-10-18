@@ -21,6 +21,8 @@ public:
     Unary_Minus(Expr* pe) : Unary_Expr(pe)
     {
     }
+
+    int eval() override;
 };
 
 

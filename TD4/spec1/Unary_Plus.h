@@ -20,6 +20,8 @@ public:
     Unary_Plus(Expr* pe) : Unary_Expr(pe)
     {
     }
+
+    int eval() override;
 };
 
 #endif

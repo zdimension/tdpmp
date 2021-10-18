@@ -16,8 +16,7 @@
 class Unary_Expr : public Expr
 {
 protected:
-    ??
-    op;
+    Expr* op;
 public:
     Unary_Expr(Expr* pe) : op(pe)
     {

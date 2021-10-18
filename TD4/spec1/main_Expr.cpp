@@ -51,10 +51,10 @@ int main()
 // anExpr = (2 + 3)*4 
     Binary_Mult anExpr(&e2plus3, &quatre);
 
-//     cout << "3 = "  << trois.eval()  << endl;
-//     cout << "-3 = " << moinsTrois.eval() << endl;
-//     cout << "e1 = "  << e1.eval()  << endl;
-//     cout << "2 + 3 = "  << e2plus3.eval()  << endl;
-//     cout << "(2 + 3) * 4 = "  << anExpr.eval()  << endl;
+     cout << "3 = "  << trois.eval()  << endl;
+     cout << "-3 = " << moinsTrois.eval() << endl;
+     cout << "e1 = "  << e1.eval()  << endl;
+     cout << "2 + 3 = "  << e2plus3.eval()  << endl;
+     cout << "(2 + 3) * 4 = "  << anExpr.eval()  << endl;
 
 }

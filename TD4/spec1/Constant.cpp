@@ -8,3 +8,8 @@
 
 
 #include "Constant.h"
+
+int Constant::eval()
+{
+    return val;
+}

@@ -23,6 +23,8 @@ public:
     Constant(int v) : val(v)
     {
     }
+
+    int eval() override;
 };
 
 #endif

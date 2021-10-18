@@ -7,3 +7,8 @@
 //=======================================================================
 
 #include "Unary_Minus.h"
+
+int Unary_Minus::eval()
+{
+    return -op->eval();
+}

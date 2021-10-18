@@ -28,6 +28,7 @@ public:
         }
     };
 
+    virtual int eval() = 0;
 };
 
 

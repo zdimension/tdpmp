@@ -8,3 +8,8 @@
 
 
 #include "Binary_Mult.h"
+
+int Binary_Mult::eval()
+{
+    return opl->eval() * opr->eval();
+}

@@ -8,3 +8,8 @@
 
 
 #include "Binary_Div.h"
+
+int Binary_Div::eval()
+{
+    return opl->eval() / opr->eval();
+}

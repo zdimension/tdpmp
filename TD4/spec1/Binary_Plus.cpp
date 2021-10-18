@@ -8,3 +8,8 @@
 
 
 #include "Binary_Plus.h"
+
+int Binary_Plus::eval()
+{
+    return opl->eval() + opr->eval();
+}
