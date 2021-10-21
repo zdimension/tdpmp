@@ -6,6 +6,7 @@
 #include "Application.hpp"
 #include "scenes/Orbits.hpp"
 #include "scenes/Axes.hpp"
+#include "scenes/Voxels.hpp"
 
 void Application::run()
 {
@@ -96,7 +97,7 @@ void Application::run()
 }
 
 Application::Application()
-        : m_renderer(Dimension(1600, 900)), m_scene(std::make_unique<Orbits>())
+        : m_renderer(Dimension(1600, 900)), m_scene(std::make_unique<Voxels>())
 {
     m_scene->add(Axes{});
 }

@@ -6,11 +6,15 @@
 #define TD3D_COLOR_HPP
 
 
-struct Color
+union Color
 {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
+    struct
+    {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
+    uint32_t rgb;
 };
 
 
