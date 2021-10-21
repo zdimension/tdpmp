@@ -18,6 +18,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
+#include <cassert>
 #include "shareddata.h"
 #include "tinyvector.h"
 
