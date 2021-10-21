@@ -25,7 +25,7 @@ struct RotatingCube : public Cube
 };
 
 
-class RotatingCubes : public Scene
+class RotatingCubes : public Scene<RotatingCube>
 {
 public:
     RotatingCubes() : Scene()

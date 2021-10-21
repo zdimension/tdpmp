@@ -7,8 +7,7 @@
 
 #include "primitives/Dimension.hpp"
 #include "Renderer.hpp"
-#include "scenes/Scene.hpp"
-#include "scenes/RotatingCubes.hpp"
+#include "scenes/BaseScene.hpp"
 
 class Application
 {
@@ -19,7 +18,7 @@ public:
 
 private:
     Renderer m_renderer;
-    std::unique_ptr<Scene> m_scene;
+    std::unique_ptr<BaseScene> m_scene;
 };
 
 #endif //TD3D_APPLICATION_HPP

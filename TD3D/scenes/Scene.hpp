@@ -9,42 +9,27 @@
 #include <vector>
 #include <memory>
 #include "../entities/Cube.hpp"
+#include "BaseScene.hpp"
 
-class Scene : public Entity
+template<typename T>
+class Scene : public BaseScene
 {
 public:
-    Scene();
-
-    void add(Cube&& object)
+    Scene() : BaseScene()
     {
-        objects.push_back(std::make_shared<Cube>(object));
+
     }
 
-    template<typename T>
-    void add(T&& object)
+    std::shared_ptr<T> add(T&& object)
     {
-        objects.push_back(std::make_shared<T>(object));
-    }
-
-public:
-    void draw() const override
-    {
-        for (auto& object: objects)
-        {
-            object->draw();
-        }
-    }
-
-    void update(Uint32 elapsed) override
-    {
-        for (auto& object: objects)
-        {
-            object->update(elapsed);
-        }
+        auto sh_ptr = std::make_shared<T>(object);
+        objects.push_back(sh_ptr);
+        spec_objects.push_back(sh_ptr);
+        return sh_ptr;
     }
 
 protected:
-    std::vector<std::shared_ptr<Cube>> objects;
+    std::vector<std::shared_ptr<T>> spec_objects;
 };
 
 
