@@ -27,14 +27,22 @@ void Application::run()
             {
                 const double rotate_speed = elapsed_time / 50.0;
 
-                if (keystate[SDL_SCANCODE_LEFT])
-                    camera.lon -= rotate_speed;
-                else if (keystate[SDL_SCANCODE_RIGHT])
-                    camera.lon += rotate_speed;
                 if (keystate[SDL_SCANCODE_UP])
                     camera.lat += rotate_speed;
                 else if (keystate[SDL_SCANCODE_DOWN])
                     camera.lat -= rotate_speed;
+
+                if (camera.lat > 360)
+                    camera.lat -= 360;
+                else if (camera.lat < 0)
+                    camera.lat += 360;
+
+                const double lon_speed = (camera.lat > 90 && camera.lat <= 270) ? -rotate_speed : rotate_speed;
+
+                if (keystate[SDL_SCANCODE_LEFT])
+                    camera.lon -= lon_speed;
+                else if (keystate[SDL_SCANCODE_RIGHT])
+                    camera.lon += lon_speed;
 
                 if (mouse.scrolled)
                     camera.norm *= (mouse.dy > 0 ? 0.9 : (1 / 0.9));
@@ -43,7 +51,7 @@ void Application::run()
                 {
                     if (oldmouse.moving)
                     {
-                        camera.lon += (mouse.mx - oldmouse.x) * rotate_speed;
+                        camera.lon += (mouse.mx - oldmouse.x) * lon_speed;
                         camera.lat += (mouse.my - oldmouse.y) * rotate_speed;
                     }
 
