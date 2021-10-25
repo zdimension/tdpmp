@@ -22,6 +22,8 @@ public:
     bool activate();
     void addItem(const MenuItem& i);
 
+    const Menu& operator=(const Menu& target) = delete;
+
     virtual ~Menu() = default;
 };
 

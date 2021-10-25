@@ -20,6 +20,8 @@ public:
 
     virtual std::unique_ptr<MenuItem> clone() const = 0;
 
+    const MenuItem& operator=(const MenuItem& target) = delete;
+
     virtual ~MenuItem() = default;
 };
 
