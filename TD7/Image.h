@@ -13,20 +13,33 @@
 #include <limits>
 #include <valarray>
 #include <cmath>
+#include <utility>
 
-struct Pixel
+struct Color
 {
-    uint8_t r, g, b;
+    union
+    {
+        struct
+        {
+            uint8_t r, g, b;
+        };
+        uint32_t rgb;
+    };
 
-    constexpr bool operator==(const Pixel& other) const
+    constexpr bool operator==(const Color& other) const
     {
         return r == other.r && g == other.g && b == other.b;
+    }
+
+    bool operator<(const Color& other) const
+    {
+        return rgb < other.rgb;
     }
 
     /**
      * @return the complementary color in sRGB space
      */
-    [[nodiscard]] constexpr Pixel negate() const
+    [[nodiscard]] constexpr Color negate() const
     {
         return {static_cast<uint8_t>(~r), static_cast<uint8_t>(~g), static_cast<uint8_t>(~b)};
     }
@@ -64,9 +77,13 @@ struct Pixel
     }
 };
 
-std::ifstream& operator>>(std::ifstream& in, Pixel& rgb);
+std::ifstream& operator>>(std::ifstream& in, Color& rgb);
 
-std::ostream& operator<<(std::ostream& out, const Pixel& rgb);
+std::ostream& operator<<(std::ostream& out, const Color& rgb);
+
+typedef size_t palette_id;
+typedef std::vector<palette_id> buffer_t;
+typedef std::vector<Color> palette_t;
 
 class Image
 {
@@ -74,7 +91,7 @@ public:
     /**
      * Substitutes a color for another
      */
-    void replace_color(const Pixel&& orig, const Pixel&& subst);
+    void replace_color(const Color&& orig, const Color&& subst);
 
     /**
      * Negates the image
@@ -102,9 +119,96 @@ public:
         read(filename);
     }
 
+    Image(Image&& other) noexcept: width(other.width), height(other.height), buffer(std::move(other.buffer)),
+                                   palette(std::move(other.palette))
+    {
+    }
+
+    Image& operator=(Image&& other) noexcept
+    {
+        width = other.width;
+        height = other.height;
+        buffer = std::move(other.buffer);
+        palette = std::move(other.palette);
+        return *this;
+    }
+
+    Color operator()(size_t x, size_t y) const
+    {
+        assert(x < width && y < height);
+        return palette[buffer[y * width + x]];
+    }
+
+    palette_id& operator()(size_t x, size_t y)
+    {
+        assert(x < width && y < height);
+        return buffer[y * width + x];
+    }
+
     void read(const std::string& filename);
 
     void write(const std::string& filename) const;
+
+    class Iterator
+    {
+        using iterator_category = std::contiguous_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = Color;
+        using pointer = const value_type*;
+        using reference = const value_type&;
+
+    public:
+        reference operator*() const
+        {
+            return m_palette[*m_ptr];
+        }
+
+        pointer operator->()
+        {
+            return &m_palette[*m_ptr];
+        }
+
+        Iterator& operator++()
+        {
+            m_ptr++;
+            return *this;
+        }
+
+        Iterator operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool operator==(const Iterator& a, const Iterator& b)
+        {
+            return a.m_ptr == b.m_ptr;
+        };
+
+        friend bool operator!=(const Iterator& a, const Iterator& b)
+        {
+            return a.m_ptr != b.m_ptr;
+        };
+
+        Iterator(const palette_id* ptr, const palette_t& palette) : m_ptr(ptr), m_palette(palette)
+        {
+        }
+
+    private:
+        const palette_id* m_ptr;
+        const palette_t& m_palette;
+    };
+
+    [[nodiscard]] Iterator begin() const
+    {
+        return {buffer.begin().operator->(), palette};
+    }
+
+    [[nodiscard]] Iterator end() const
+    {
+        return {buffer.end().operator->(), palette};
+    }
 
 private:
     friend std::ifstream& operator>>(std::ifstream& in, Image& img);
@@ -117,7 +221,8 @@ private:
     }
 
     size_t width, height;
-    std::unique_ptr<Pixel[]> buffer;
+    buffer_t buffer;
+    palette_t palette;
 };
 
 
